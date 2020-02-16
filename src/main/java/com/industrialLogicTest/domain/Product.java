@@ -1,15 +1,14 @@
-package com.industrialLogic.domain;
+package com.industrialLogicTest.domain;
 
 import org.javamoney.moneta.Money;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Value;
 
-@Getter
-@EqualsAndHashCode
-public class Product implements Comparable<Product>{
+@Value
+public class Product implements Comparable<Product> {
     public static final String DEFAULT_CURRENCY = "GBP";
+    public static final Money ZERO = Money.of(0, DEFAULT_CURRENCY);
+
     private final String name;
     private final String unit;
     private final Money price;
@@ -18,14 +17,6 @@ public class Product implements Comparable<Product>{
         this.name = name;
         this.unit = unit;
         this.price = Money.of(price, DEFAULT_CURRENCY);
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "'" + name + '\'' +
-                " at " + price.getNumber() +
-                " per " + unit + '}';
     }
 
     @Override

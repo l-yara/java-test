@@ -1,22 +1,17 @@
-package com.industrialLogic.domain;
+package com.industrialLogicTest.domain;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Value;
 
-// Immutable basket
-@ToString
+@Value
 public class Basket {
-    @Getter
+
     private final LocalDate date;
 
-    @Getter
     //content sorted by Product
     private final SortedMap<Product, Integer> content;
 
@@ -31,6 +26,16 @@ public class Basket {
     private Basket(LocalDate date, SortedMap<Product, Integer> content) {
         this.date = date;
         this.content = Collections.unmodifiableSortedMap(content);
+    }
+
+    /**
+     * copy existing Basket on the new Date
+     *
+     * @param newDate a move-to date
+     * @return this
+     */
+    public Basket withDate(LocalDate newDate) {
+        return new Basket(newDate, this.content);
     }
 
     /**
@@ -81,15 +86,4 @@ public class Basket {
         return new Basket(getDate(), newContent);
     }
 
-    /**
-     * utility method - "give amount of productName in the basket
-     *
-     * @param productName a name of the product
-     * @return count number of items of given product (defined by name) in the basket
-     */
-    public int amountOf(String productName) {
-        return content.entrySet().stream()
-                .filter(e -> e.getKey().getName().equalsIgnoreCase(productName))
-                .findFirst().map(e -> e.getValue()).orElse(0);
-    }
 }

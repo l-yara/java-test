@@ -5,4 +5,3 @@
 # Implementation Notes
 1. Used https://projectlombok.org/ to auto-generate boilerplate code, including `equals()` and `hashCode()` methods for the domain objects (hope you trust me that I know the spec for these two).
 2. Each Discount (Promotion) can be applied only once: for example, if basket contains 4 tins of soup, the customer will not get his loaf of bread free. Not a big deal to make multi-discount application anyway.
-3. I'm using guava's `ImmutableMap` for comparing maps in test assertions.  
