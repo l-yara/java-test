@@ -1,5 +1,6 @@
 package com.industrialLogicTest.controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,7 +34,7 @@ public class PriceCalculator {
         double allDiscounts = promotions.stream()
                 .mapToDouble(p -> this.applyPromotion(basket, p)).sum();
 
-        return totalPrice - allDiscounts;
+        return new BigDecimal(totalPrice - allDiscounts).setScale(2, BigDecimal.ROUND_UP).doubleValue();
     }
 
     //apply single promotion to the basket - visible for testing

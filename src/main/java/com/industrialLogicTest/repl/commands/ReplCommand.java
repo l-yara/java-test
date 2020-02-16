@@ -1,7 +1,5 @@
 package com.industrialLogicTest.repl.commands;
 
-import org.apache.logging.log4j.util.Strings;
-
 import com.industrialLogicTest.repl.ReplSessionState;
 
 import lombok.AllArgsConstructor;
@@ -14,6 +12,8 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public abstract class ReplCommand {
+    public static final String OK = "";
+
     private final String name;
     private final String description;
 
@@ -30,7 +30,7 @@ public abstract class ReplCommand {
         @Override
         public String apply(String arguments, ReplSessionState session) {
             System.exit(0);
-            return Strings.EMPTY;
+            return OK;
         }
     };
 }

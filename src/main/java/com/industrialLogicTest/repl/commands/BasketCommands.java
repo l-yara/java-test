@@ -1,9 +1,8 @@
 package com.industrialLogicTest.repl.commands;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.logging.log4j.util.Strings;
 
 import com.google.common.base.Splitter;
 import com.industrialLogicTest.domain.Basket;
@@ -17,29 +16,77 @@ public class BasketCommands {
     public static final ReplCommand CLEAR_BASKET = new ReplCommand("clear", "Reset basket to (today, no items) state") {
         @Override
         public String apply(String arguments, ReplSessionState session) {
-            session.updateBasket(new Basket());
-            return "";
+            Basket existing = session.getBasket();
+            session.updateBasket(new Basket(existing.getDate()));
+            return OK;
         }
     };
 
-    public static final ReplCommand ADD_ITEM = new AddItemCommand();
+    public static final ReplCommand ADD_ITEMS = new AddItemsCommand();
+    public static final ReplCommand REMOVE_ITEMS = new RemoveItemsCommand();
+    public static final ReplCommand NEW_DATE = new UpdateDateCommand();
 
-
-    private static class AddItemCommand extends ReplCommand {
-        public AddItemCommand() {
+    private static class AddItemsCommand extends ItemUpdateCommand {
+        public AddItemsCommand() {
             super("add", "Add item(s) to basket. Items should be described as name:amount[[,name:amount],...]. Example: add apples:3, soup:2, bread: 4.");
         }
+
+        @Override
+        protected Basket applyPerItem(Basket basket, Map.Entry<Product, Integer> entry) {
+            return basket.addItems(entry.getKey(), entry.getValue());
+        }
+    }
+
+    private static class RemoveItemsCommand extends ItemUpdateCommand {
+        public RemoveItemsCommand() {
+            super("remove", "Remove item(s) from basket. Items should be described as name:amount[[,name:amount],...]. Example: remove apples:1, soup:3");
+        }
+
+        @Override
+        protected Basket applyPerItem(Basket basket, Map.Entry<Product, Integer> entry) {
+            return basket.removeItems(entry.getKey(), entry.getValue());
+        }
+    }
+
+    private static abstract class ItemUpdateCommand extends ReplCommand {
+
+        public ItemUpdateCommand(String name, String description) {
+            super(name, description);
+        }
+
+        protected abstract Basket applyPerItem(Basket basket, Map.Entry<Product, Integer> entry);
 
         @Override
         public String apply(String arguments, ReplSessionState session) throws ParsingException {
             Map<Product, Integer> productPairs = extractAmounts(session, arguments);
             Basket currentBasket = session.getBasket();
             for (Map.Entry<Product, Integer> entry : productPairs.entrySet()) {
-                currentBasket = currentBasket.addItems(entry.getKey(), entry.getValue());
+                currentBasket = applyPerItem(currentBasket, entry);
             }
             session.updateBasket(currentBasket);
-            //empty string means "nothing special, all OK"
-            return Strings.EMPTY;
+            return OK;
+        }
+
+    }
+
+    /**
+     * Update Basket's date (do not touch content)
+     */
+    private static class UpdateDateCommand extends ReplCommand {
+        public UpdateDateCommand() {
+            super("date", "Update basket's purchase date. The new date must be in YYYY-MM-DD formar. Example: date 2020-02-18");
+        }
+
+        @Override
+        public String apply(String arguments, ReplSessionState session) throws ParsingException {
+            try {
+                LocalDate newDate = LocalDate.parse(arguments.trim());
+                Basket currentBasket = session.getBasket();
+                session.updateBasket(currentBasket.withDate(newDate));
+                return OK;
+            } catch (Exception e) {
+                throw new ParsingException("unable to parse new purchase date from '" + arguments + "'");
+            }
         }
     }
 

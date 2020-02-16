@@ -16,7 +16,7 @@ import lombok.Value;
  * A convenience class for {@linkplain PriceCalculator}. Should be an inner class of the latter but I want a bit of convenience for testing
  */
 @Value
-class PricingContext {
+public class PricingContext {
     private final Basket basket;
 
     /**

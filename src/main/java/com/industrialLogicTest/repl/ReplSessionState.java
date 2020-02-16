@@ -38,13 +38,13 @@ public class ReplSessionState {
 
     @Getter
     private Basket basket = new Basket();
-    @Getter
-    private double totalBasketCost = 0.0;
+
+    public double getTotalBasketCost() {
+        return new PriceCalculator(getPromotions()).calculatePrice(getBasket());
+    }
 
     public Basket updateBasket(Basket newBasket) {
-        this.basket = newBasket;
-        totalBasketCost = new PriceCalculator(getPromotions()).calculatePrice(basket);
-        return basket;
+        return this.basket = newBasket;
     }
 
     //find product by name. Formally, storing Products in Map should provide me with faster access

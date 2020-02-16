@@ -19,7 +19,7 @@ import lombok.Getter;
 public class ReplSessionController {
     @Getter
     private final List<ReplCommand> commands = Arrays.asList(
-            BasketCommands.CLEAR_BASKET, BasketCommands.ADD_ITEM,
+            BasketCommands.CLEAR_BASKET, BasketCommands.ADD_ITEMS, BasketCommands.REMOVE_ITEMS, BasketCommands.NEW_DATE,
 
             ReplCommand.EXIT
     );
@@ -50,7 +50,7 @@ public class ReplSessionController {
                     return e.getMessage();
                 }
             } else {
-                return "unable to interpret command: got '" + command + "' out of " + trimmed;
+                return "Unable to interpret command: got '" + command + "' out of '" + trimmed + "'";
             }
         }
     }

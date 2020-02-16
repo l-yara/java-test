@@ -17,9 +17,16 @@ import lombok.extern.log4j.Log4j2;
 public class Promotion {
     public static final ExpressionParser PARSER = new SpelExpressionParser();
 
+    /**
+     * is NOT used for id - rather for description
+     */
     private final String name;
     private final LocalDate validFrom;
     private final LocalDate validTo;
+    /**
+     * A SpEL (https://docs.spring.io/spring/docs/4.3.10.RELEASE/spring-framework-reference/html/expressions.html)
+     * expression calculating the discount value based on the {@linkplain com.industrialLogicTest.controller.PricingContext} (actually, for the {@linkplain com.industrialLogicTest.domain.Basket}). If not applicable, return 0.0
+     */
     private final Expression discountExp;
 
     public Promotion(String name, LocalDate validFrom, LocalDate validTo, String discountExp) {
