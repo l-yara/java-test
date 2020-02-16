@@ -1,9 +1,9 @@
 package com.industrialLogicTest.domain;
 
 
-import static com.industrialLogicTest.domain.TestData.SOUP;
-import static com.industrialLogicTest.domain.TestData.BREAD;
-import static com.industrialLogicTest.domain.TestData.MILK;
+import static com.industrialLogicTest.domain.Product.BREAD;
+import static com.industrialLogicTest.domain.Product.MILK;
+import static com.industrialLogicTest.domain.Product.SOUP;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;

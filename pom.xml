@@ -14,6 +14,13 @@
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>28.2-jre</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.javamoney.moneta/moneta-core -->
         <dependency>
             <groupId>org.javamoney.moneta</groupId>
@@ -35,6 +42,13 @@
             <artifactId>spring-context</artifactId>
             <version>5.0.8.RELEASE</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/jline/jline -->
+        <dependency>
+            <groupId>jline</groupId>
+            <artifactId>jline</artifactId>
+            <version>3.0.0.M1</version>
+        </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
@@ -52,13 +66,5 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-        <dependency>
-            <!-- use in tests - to compare maps with ImmutableMap convenience-->
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>28.2-jre</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 </project>

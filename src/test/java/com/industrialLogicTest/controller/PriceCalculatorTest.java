@@ -39,20 +39,18 @@ public class PriceCalculatorTest {
         final Promotion past = new Promotion("stale", PAST_3, YESTERDAY, "999.01");
         final Promotion future = new Promotion("in future", FUTURE_3, FUTURE_5, "55.02");
 
-        PriceCalculator calculator = new PriceCalculator();
-
         //TEST_1 is for "today"
-        assertZero( calculator.applyPromotion(TEST_1, past));
-        assertZero(calculator.applyPromotion(TEST_1, future));
+        assertZero(NO_PROMS_CALCULATOR.applyPromotion(TEST_1, past));
+        assertZero(NO_PROMS_CALCULATOR.applyPromotion(TEST_1, future));
         //yesterday: PROMOTION_IN_PAST is applicable, PROMOTION_IN_FUTURE is not
         Basket yesterdayBasket = TEST_1.withDate(YESTERDAY);
-        assertDouble(999.01, calculator.applyPromotion(yesterdayBasket, past));
-        assertZero(calculator.applyPromotion(yesterdayBasket, future));
+        assertDouble(999.01, NO_PROMS_CALCULATOR.applyPromotion(yesterdayBasket, past));
+        assertZero(NO_PROMS_CALCULATOR.applyPromotion(yesterdayBasket, future));
 
         //future: PROMOTION_IN_PAST is not applicable, PROMOTION_IN_FUTURE is
         Basket futureBasket = TEST_1.withDate(FUTURE_3);
-        assertZero(calculator.applyPromotion(futureBasket, past));
-        assertDouble(55.02, calculator.applyPromotion(futureBasket, future));
+        assertZero(NO_PROMS_CALCULATOR.applyPromotion(futureBasket, past));
+        assertDouble(55.02, NO_PROMS_CALCULATOR.applyPromotion(futureBasket, future));
     }
 
     @Test
@@ -61,12 +59,10 @@ public class PriceCalculatorTest {
         final Promotion broken = new Promotion("stale", PAST_3, FUTURE_5, "oops");
         final Promotion ok = new Promotion("soup_minus_20%", PAST_3, FUTURE_5, "totalPriceFor('soup') * 0.2");
 
-        PriceCalculator calculator = new PriceCalculator();
-
         //TEST_1 is for "today" so should go to the calculation
-        assertZero(calculator.applyPromotion(TEST_1, broken));
+        assertZero(NO_PROMS_CALCULATOR.applyPromotion(TEST_1, broken));
         //3 tins of soup = 3 * 0.65 = £1.95; 20% of £1.95 is £0.39
-        assertDouble(0.39, calculator.applyPromotion(TEST_1, ok));
+        assertDouble(0.39, NO_PROMS_CALCULATOR.applyPromotion(TEST_1, ok));
     }
 
     @Test
@@ -77,7 +73,7 @@ public class PriceCalculatorTest {
         assertDouble(1.84, STANDARD_CALCULATOR.calculatePrice(TEST_3));
         assertDouble(1.97, STANDARD_CALCULATOR.calculatePrice(TEST_4));
         //empty basket OK
-        assertZero( STANDARD_CALCULATOR.calculatePrice(new Basket(TODAY)));
+        assertZero(STANDARD_CALCULATOR.calculatePrice(new Basket(TODAY)));
     }
 
     @Test
@@ -88,7 +84,7 @@ public class PriceCalculatorTest {
         assertDouble(1.90, NO_PROMS_CALCULATOR.calculatePrice(TEST_3));
         assertDouble(2.40, NO_PROMS_CALCULATOR.calculatePrice(TEST_4));
         //empty basket OK
-        assertZero( STANDARD_CALCULATOR.calculatePrice(new Basket(TODAY)));
+        assertZero(STANDARD_CALCULATOR.calculatePrice(new Basket(TODAY)));
     }
 
     @Test
