@@ -17,7 +17,7 @@ public class TestData {
     public static final LocalDate FUTURE_5 = TODAY.plusDays(5);
 
     public static final Basket TEST_1 = new Basket(TODAY).addItems(SOUP, 3).addItems(BREAD, 2);
-    public static final Basket TEST_2 = new Basket(TODAY).addItems(APPLES, 6).addItem(MILK);
+    public static final Basket TEST_2 = new Basket(TODAY).addItems(APPLES, 6).addItems(MILK, 1);
     public static final Basket TEST_3 = TEST_2.withDate(FUTURE_5);
-    public static final Basket TEST_4 = new Basket(FUTURE_5).addItems(APPLES, 3).addItems(SOUP, 2).addItem(BREAD);
+    public static final Basket TEST_4 = new Basket(FUTURE_5).addItems(APPLES, 3).addItems(SOUP, 2).addItems(BREAD, 1);
 }

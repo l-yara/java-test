@@ -38,16 +38,6 @@ public class Basket {
     }
 
     /**
-     * Add one item of given product to the basket
-     *
-     * @param product a product to add
-     * @return this
-     */
-    public Basket addItem(Product product) {
-        return addItems(product, 1);
-    }
-
-    /**
      * Add a given amount of items of given product to the basket
      *
      * @param product a product to add
@@ -58,16 +48,6 @@ public class Basket {
         TreeMap<Product, Integer> newContent = new TreeMap<>(content);
         newContent.compute(product, (ignore, oldAmount) -> amount + (oldAmount == null ? 0 : oldAmount));
         return new Basket(getDate(), newContent);
-    }
-
-    /**
-     * Remove one item of given product, if exists in the basket.
-     *
-     * @param product a product to add
-     * @return this
-     */
-    public Basket removeItem(Product product) {
-        return removeItems(product, 1);
     }
 
     /**

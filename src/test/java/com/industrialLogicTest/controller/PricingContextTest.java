@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j2;
 public class PricingContextTest {
     public static final double TOLERANCE = 0.00000001;
     public static final Basket BASKET_1 = new Basket(TODAY).addItems(SOUP, 5);
-    Basket BASKET_2 = BASKET_1.addItem(SOUP).addItems(BREAD, 2).removeItem(MILK);
+    Basket BASKET_2 = BASKET_1.addItems(SOUP, 1).addItems(BREAD, 2).removeItems(MILK, 1);
 
     @Test
     public void testUtils() {

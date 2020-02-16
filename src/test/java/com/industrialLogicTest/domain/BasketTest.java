@@ -20,7 +20,7 @@ public class BasketTest {
         Basket basket1 = new Basket().addItems(SOUP, 5);
         assertEquals(ImmutableMap.of(SOUP, 5), basket1.getContent());
 
-        Basket basket2 = basket1.addItem(SOUP).addItems(BREAD, 2).removeItem(MILK);
+        Basket basket2 = basket1.addItems(SOUP, 1).addItems(BREAD, 2).removeItems(MILK, 1);
         assertEquals(ImmutableMap.of(SOUP, 6, BREAD, 2), basket2.getContent());
 
         Basket basket3 = basket2.removeItems(SOUP, 3).removeItems(BREAD, 4);
