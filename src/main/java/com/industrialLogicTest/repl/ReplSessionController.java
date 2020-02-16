@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.google.common.base.Strings;
 import com.industrialLogicTest.repl.commands.BasketCommands;
+import com.industrialLogicTest.repl.commands.ParsingException;
 import com.industrialLogicTest.repl.commands.ReplCommand;
 
 import lombok.Getter;
@@ -42,8 +43,15 @@ public class ReplSessionController {
             //remainder is argument(s)
             String arguments = trimmed.length() > command.length() ? trimmed.substring(command.length() + 1) : "";
             Optional<ReplCommand> replCommand = commands.stream().filter(c -> c.getName().equalsIgnoreCase(command)).findFirst();
-            return replCommand.map(cmd -> cmd.apply(arguments, state))
-                    .orElse("unable to interpret command: got '" + command + "' out of " + trimmed);
+            if (replCommand.isPresent()) {
+                try {
+                    return replCommand.get().apply(arguments, state);
+                } catch (ParsingException e) {
+                    return e.getMessage();
+                }
+            } else {
+                return "unable to interpret command: got '" + command + "' out of " + trimmed;
+            }
         }
     }
 }

@@ -29,20 +29,17 @@ public class BasketCommands {
         public AddItemCommand() {
             super("add", "Add item(s) to basket. Items should be described as name:amount[[,name:amount],...]. Example: add apples:3, soup:2, bread: 4.");
         }
+
         @Override
-        public String apply(String arguments, ReplSessionState session) {
-            try {
-                Map<Product, Integer> productPairs = extractAmounts(session, arguments);
-                Basket currentBasket = session.getBasket();
-                for(Map.Entry<Product, Integer> entry : productPairs.entrySet()) {
-                    currentBasket = currentBasket.addItems(entry.getKey(), entry.getValue());
-                }
-                session.updateBasket(currentBasket);
-                //empty string means "nothing special, all OK"
-                return Strings.EMPTY;
-            } catch (ParsingException e) {
-                return e.getMessage();
+        public String apply(String arguments, ReplSessionState session) throws ParsingException {
+            Map<Product, Integer> productPairs = extractAmounts(session, arguments);
+            Basket currentBasket = session.getBasket();
+            for (Map.Entry<Product, Integer> entry : productPairs.entrySet()) {
+                currentBasket = currentBasket.addItems(entry.getKey(), entry.getValue());
             }
+            session.updateBasket(currentBasket);
+            //empty string means "nothing special, all OK"
+            return Strings.EMPTY;
         }
     }
 
@@ -51,7 +48,7 @@ public class BasketCommands {
      *
      * @param arguments a string of Product:Amount pairs, separated by comma
      * @return decoded Map
-     * @throws com.industrialLogicTest.repl.commands.BasketCommands.ParsingException informing about exact parsing problem
+     * @throws com.industrialLogicTest.repl.commands.ParsingException informing about exact parsing problem
      */
     //visible for testing
     static Map<Product, Integer> extractAmounts(ReplSessionState session, String arguments) throws ParsingException {
@@ -75,9 +72,5 @@ public class BasketCommands {
         return ret;
     }
 
-    static class ParsingException extends Exception {
-        public ParsingException(String message) {
-            super(message);
-        }
-    }
+
 }

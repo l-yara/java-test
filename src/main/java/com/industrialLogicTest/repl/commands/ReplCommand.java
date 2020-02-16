@@ -24,7 +24,7 @@ public abstract class ReplCommand {
      * @param session a current session
      * @return user's outcome (might be null or empty)
      */
-    public abstract String apply(String arguments, ReplSessionState session);
+    public abstract String apply(String arguments, ReplSessionState session) throws ParsingException;
 
     public static final ReplCommand EXIT = new ReplCommand("quit", "Quit the program") {
         @Override
