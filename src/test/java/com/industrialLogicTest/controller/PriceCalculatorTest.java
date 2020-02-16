@@ -1,8 +1,8 @@
 package com.industrialLogicTest.controller;
 
 import static com.industrialLogicTest.controller.PriceCalculator.endOfMonth;
-import static com.industrialLogicTest.domain.Basket.ZERO;
-import static com.industrialLogicTest.domain.Basket.amount;
+import static com.industrialLogicTest.controller.PricingContextTest.assertDouble;
+import static com.industrialLogicTest.controller.PricingContextTest.assertZero;
 import static com.industrialLogicTest.domain.TestData.FUTURE_3;
 import static com.industrialLogicTest.domain.TestData.FUTURE_5;
 import static com.industrialLogicTest.domain.TestData.PAST_3;
@@ -27,68 +27,68 @@ public class PriceCalculatorTest {
     public static final PriceCalculator STANDARD_CALCULATOR = new PriceCalculator(
             new Promotion("2 tins -> bread 1/2 price", YESTERDAY, YESTERDAY.plusDays(7),
                     //if you have two or more tins of soup, get 0.5 * price of bread discount
-                    "amountOf('soup') >= 2 ? priceFor('bread').multiply(0.5) : amount(0)"),
+                    "amountOf('soup') >= 2 ? priceFor('bread') * 0.5 : 0"),
             //price for all apples -10% (no apples - no discount)
             new Promotion("apples 10% off", FUTURE_3, endOfMonth(TODAY, 1),
-                    "totalPriceFor('apples').multiply(0.1)")
+                    "totalPriceFor('apples') * 0.1")
     );
 
     @Test
     public void testApplySinglePromotion_Dates() {
         //these two will reduce by constants if applicable
-        final Promotion past = new Promotion("stale", PAST_3, YESTERDAY, "exact(999.01)");
-        final Promotion future = new Promotion("in future", FUTURE_3, FUTURE_5, "exact(55.02)");
+        final Promotion past = new Promotion("stale", PAST_3, YESTERDAY, "999.01");
+        final Promotion future = new Promotion("in future", FUTURE_3, FUTURE_5, "55.02");
 
         PriceCalculator calculator = new PriceCalculator();
 
         //TEST_1 is for "today"
-        assertEquals(ZERO, calculator.applyPromotion(TEST_1, past));
-        assertEquals(ZERO, calculator.applyPromotion(TEST_1, future));
+        assertZero( calculator.applyPromotion(TEST_1, past));
+        assertZero(calculator.applyPromotion(TEST_1, future));
         //yesterday: PROMOTION_IN_PAST is applicable, PROMOTION_IN_FUTURE is not
         Basket yesterdayBasket = TEST_1.withDate(YESTERDAY);
-        assertEquals(amount(999.01), calculator.applyPromotion(yesterdayBasket, past));
-        assertEquals(ZERO, calculator.applyPromotion(yesterdayBasket, future));
+        assertDouble(999.01, calculator.applyPromotion(yesterdayBasket, past));
+        assertZero(calculator.applyPromotion(yesterdayBasket, future));
 
         //future: PROMOTION_IN_PAST is not applicable, PROMOTION_IN_FUTURE is
         Basket futureBasket = TEST_1.withDate(FUTURE_3);
-        assertEquals(ZERO, calculator.applyPromotion(futureBasket, past));
-        assertEquals(amount(55.02), calculator.applyPromotion(futureBasket, future));
+        assertZero(calculator.applyPromotion(futureBasket, past));
+        assertDouble(55.02, calculator.applyPromotion(futureBasket, future));
     }
 
     @Test
     public void testApplySinglePromotion_BrokenExpression() {
         //these two will reduce by constants if applicable
         final Promotion broken = new Promotion("stale", PAST_3, FUTURE_5, "oops");
-        final Promotion ok = new Promotion("soup_minus_20%", PAST_3, FUTURE_5, "totalPriceFor('soup').divide(5)");
+        final Promotion ok = new Promotion("soup_minus_20%", PAST_3, FUTURE_5, "totalPriceFor('soup') * 0.2");
 
         PriceCalculator calculator = new PriceCalculator();
 
         //TEST_1 is for "today" so should go to the calculation
-        assertEquals(ZERO, calculator.applyPromotion(TEST_1, broken));
+        assertZero(calculator.applyPromotion(TEST_1, broken));
         //3 tins of soup = 3 * 0.65 = £1.95; 20% of £1.95 is £0.39
-        assertEquals(amount(0.39), calculator.applyPromotion(TEST_1, ok));
+        assertDouble(0.39, calculator.applyPromotion(TEST_1, ok));
     }
 
     @Test
     public void testStandardValues() {
         //as in spec
-        assertEquals(amount(3.15), STANDARD_CALCULATOR.calculatePrice(TEST_1));
-        assertEquals(amount(1.90), STANDARD_CALCULATOR.calculatePrice(TEST_2));
-        assertEquals(amount(1.84), STANDARD_CALCULATOR.calculatePrice(TEST_3));
-        assertEquals(amount(1.97), STANDARD_CALCULATOR.calculatePrice(TEST_4));
+        assertDouble(3.15, STANDARD_CALCULATOR.calculatePrice(TEST_1));
+        assertDouble(1.90, STANDARD_CALCULATOR.calculatePrice(TEST_2));
+        assertDouble(1.84, STANDARD_CALCULATOR.calculatePrice(TEST_3));
+        assertDouble(1.97, STANDARD_CALCULATOR.calculatePrice(TEST_4));
         //empty basket OK
-        assertEquals(amount(0), STANDARD_CALCULATOR.calculatePrice(new Basket(TODAY)));
+        assertZero( STANDARD_CALCULATOR.calculatePrice(new Basket(TODAY)));
     }
 
     @Test
     public void testNoPromsCalculator() {
         //no proms - no problems, just prices higher
-        assertEquals(amount(3.55), NO_PROMS_CALCULATOR.calculatePrice(TEST_1));
-        assertEquals(amount(1.90), NO_PROMS_CALCULATOR.calculatePrice(TEST_2));
-        assertEquals(amount(1.90), NO_PROMS_CALCULATOR.calculatePrice(TEST_3));
-        assertEquals(amount(2.40), NO_PROMS_CALCULATOR.calculatePrice(TEST_4));
+        assertDouble(3.55, NO_PROMS_CALCULATOR.calculatePrice(TEST_1));
+        assertDouble(1.90, NO_PROMS_CALCULATOR.calculatePrice(TEST_2));
+        assertDouble(1.90, NO_PROMS_CALCULATOR.calculatePrice(TEST_3));
+        assertDouble(2.40, NO_PROMS_CALCULATOR.calculatePrice(TEST_4));
         //empty basket OK
-        assertEquals(amount(0), STANDARD_CALCULATOR.calculatePrice(new Basket(TODAY)));
+        assertZero( STANDARD_CALCULATOR.calculatePrice(new Basket(TODAY)));
     }
 
     @Test

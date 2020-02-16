@@ -1,7 +1,5 @@
 package com.industrialLogicTest.controller;
 
-import static com.industrialLogicTest.domain.Basket.ZERO;
-
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,34 +24,38 @@ public class PriceCalculator {
         this.promotions = promotions;
     }
 
-    public Money calculatePrice(Basket basket) {
-        Money totalPrice = basket.getContent().entrySet().stream()
+    public double calculatePrice(Basket basket) {
+        double totalPrice = basket.getContent().entrySet().stream()
                 .map(e -> e.getKey().getPrice().multiply(e.getValue()))
-                .reduce(Money::add).orElse(ZERO);
-        Money allDiscounts = promotions.stream()
-                .map(p -> this.applyPromotion(basket, p))
-                .reduce(Money::add).orElse(ZERO);
+                .reduce(Money::add)
+                .map(m -> m.getNumber().doubleValue()).orElse(0.0);
 
-        return totalPrice.subtract(allDiscounts);
+        double allDiscounts = promotions.stream()
+                .mapToDouble(p -> this.applyPromotion(basket, p)).sum();
+
+        return totalPrice - allDiscounts;
     }
 
     //apply single promotion to the basket - visible for testing
-    Money applyPromotion(Basket basket, Promotion promotion) {
+    double applyPromotion(Basket basket, Promotion promotion) {
         PricingContext context = new PricingContext(basket);
         LocalDate contextDate = context.getDate();
         if (!promotion.getValidFrom().isAfter(contextDate) &&
                 !promotion.getValidTo().isBefore(contextDate)) {
+            //if dates OK
             try {
-                return promotion.getDiscountExp().getValue(context, Money.class);
-            } catch (Exception e) {
-                log.error("Exception trying to apply '" + promotion.getDiscountExp().getExpressionString() + "' to " + basket, e);
+                Double value = promotion.getDiscountExp().getValue(context, Double.class);
+                return (value == null || value.isNaN()) ? 0.0 : value;
+            } catch (Exception ignore) {
+                log.error("Unable to apply '" + promotion.getDiscountExp().getExpressionString() + "' to " + basket);
             }
         }
-        return ZERO;
+        return 0.0;
     }
 
     /**
      * Calculate exact last day of the given month
+     *
      * @param today  a given date
      * @param months 0 - this month, 1 - next month, 2 - month after etc
      * @return last day of the month

@@ -1,7 +1,5 @@
 package com.industrialLogicTest.controller;
 
-import static com.industrialLogicTest.domain.Basket.ZERO;
-import static com.industrialLogicTest.domain.Basket.amount;
 import static com.industrialLogicTest.domain.TestData.BREAD;
 import static com.industrialLogicTest.domain.TestData.MILK;
 import static com.industrialLogicTest.domain.TestData.SOUP;
@@ -16,13 +14,13 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class PricingContextTest {
+    public static final double TOLERANCE = 0.00000001;
     public static final Basket BASKET_1 = new Basket(TODAY).addItems(SOUP, 5);
     Basket BASKET_2 = BASKET_1.addItem(SOUP).addItems(BREAD, 2).removeItem(MILK);
 
     @Test
     public void testUtils() {
         PricingContext ctx = new PricingContext(BASKET_1);
-        assertEquals(amount(3.25), ctx.exact(3.25));
         assertEquals(TODAY, ctx.getDate());
     }
 
@@ -30,18 +28,18 @@ public class PricingContextTest {
     public void testBasket_1() {
         PricingContext ctx = new PricingContext(BASKET_1);
         assertEquals(5, ctx.amountOf("soup"));
-        assertEquals(SOUP.getPrice(), ctx.priceFor("sOUp"));
-        assertEquals(amount(3.25), ctx.totalPriceFor("souP"));
+        assertDouble(0.65, ctx.priceFor("sOUp"));
+        assertDouble(3.25, ctx.totalPriceFor("souP"));
 
         assertEquals(0, ctx.amountOf("milk"));
-        assertEquals(ZERO, ctx.priceFor("milk"));
-        assertEquals(ZERO, ctx.totalPriceFor("milk"));
+        assertZero(ctx.priceFor("milk"));
+        assertZero(ctx.totalPriceFor("milk"));
         //wrong product name:
         assertEquals(0, ctx.amountOf("oops"));
-        assertEquals(ZERO, ctx.priceFor("oops"));
-        assertEquals(ZERO, ctx.totalPriceFor("oops"));
+        assertZero(ctx.priceFor("oops"));
+        assertZero(ctx.totalPriceFor("oops"));
 
-        assertEquals(amount(3.25), ctx.totalPrice());
+        assertDouble(3.25, ctx.totalPrice());
     }
 
     @Test
@@ -49,18 +47,18 @@ public class PricingContextTest {
         PricingContext ctx = new PricingContext(BASKET_2);
         log.error("{}", ctx);
         assertEquals(6, ctx.amountOf("SOUP"));
-        assertEquals(SOUP.getPrice(), ctx.priceFor("sOUp"));
-        assertEquals(amount(3.9), ctx.totalPriceFor("souP"));
+        assertDouble(0.65, ctx.priceFor("sOUp"));
+        assertDouble(3.9, ctx.totalPriceFor("souP"));
         assertEquals(0, ctx.amountOf("milk"));
         //no milk in basket - no priced per item, sorry
-        assertEquals(ZERO, ctx.priceFor("milk"));
-        assertEquals(ZERO, ctx.totalPriceFor("milk"));
+        assertZero(ctx.priceFor("milk"));
+        assertZero(ctx.totalPriceFor("milk"));
 
         assertEquals(2, ctx.amountOf("bread"));
-        assertEquals(BREAD.getPrice(), ctx.priceFor("bread"));
-        assertEquals(amount(1.6), ctx.totalPriceFor("bread"));
+        assertDouble(0.8, ctx.priceFor("bread"));
+        assertDouble(1.6, ctx.totalPriceFor("bread"));
 
-        assertEquals(amount(5.5), ctx.totalPrice());
+        assertDouble(5.5, ctx.totalPrice());
     }
 
     @Test
@@ -68,9 +66,17 @@ public class PricingContextTest {
         PricingContext ctx = new PricingContext(new Basket());
         //no failures - only zeros
         assertEquals(0, ctx.amountOf("SOUP"));
-        assertEquals(ZERO, ctx.priceFor("sOUp"));
-        assertEquals(ZERO, ctx.totalPriceFor("souP"));
+        assertZero(ctx.priceFor("sOUp"));
+        assertZero(ctx.totalPriceFor("souP"));
         assertEquals(0, ctx.amountOf("milk"));
-        assertEquals(ZERO, ctx.totalPrice());
+        assertZero(ctx.totalPrice());
+    }
+
+    public static void assertDouble(double expected, double actual) {
+        assertEquals(expected, actual, TOLERANCE);
+    }
+
+    public static void assertZero(double actual) {
+        assertDouble(0.0, actual);
     }
 }
