@@ -41,7 +41,7 @@ public class ReplSessionFormatter {
             ret.append("purchased at " + basket.getDate() + LINE_SEPARATOR);
             ret.append("- Items:" + LINE_SEPARATOR);
             content.forEach((p, amount) -> ret.append(
-                    String.format("-- %d %s(s) of %s at %.2f", amount, p.getUnit(), p.getName(), p.getPrice().getNumber().doubleValue()))
+                    String.format("-- %d %s(s) of %s at %.2f each", amount, p.getUnit(), p.getName(), p.getPrice().getNumber().doubleValue()))
                     .append(LINE_SEPARATOR));
         }
         ret.append(String.format("Total Cost: %.2f", totalCost));

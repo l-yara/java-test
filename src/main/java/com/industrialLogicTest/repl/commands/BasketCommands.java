@@ -60,12 +60,12 @@ public class BasketCommands {
         // processing will be a bit bulky, imperative is much cleaner:
         Map<Product, Integer> ret = new HashMap<>();
         for (Map.Entry<String, String> src : parsed.entrySet()) {
-            String productName = src.getKey();
+            String productName = src.getKey().trim();
             Product product = session.findProduct(productName);
             if (product == null) {
                 throw new ParsingException("Unable to find Product by name '" + productName + "' - part of " + arguments);
             }
-            String amountStr = src.getValue();
+            String amountStr = src.getValue().trim();
             try {
                 ret.put(product, Integer.parseInt(amountStr));
             } catch (Exception e) {

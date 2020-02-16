@@ -26,7 +26,7 @@ public abstract class ReplCommand {
      */
     public abstract String apply(String arguments, ReplSessionState session);
 
-    public static final ReplCommand EXIT_COMMAND = new ReplCommand("quit", "quite the program") {
+    public static final ReplCommand EXIT = new ReplCommand("quit", "Quit the program") {
         @Override
         public String apply(String arguments, ReplSessionState session) {
             System.exit(0);

@@ -18,7 +18,9 @@ import lombok.Getter;
 public class ReplSessionController {
     @Getter
     private final List<ReplCommand> commands = Arrays.asList(
-            BasketCommands.CLEAR_BASKET, BasketCommands.ADD_ITEM
+            BasketCommands.CLEAR_BASKET, BasketCommands.ADD_ITEM,
+
+            ReplCommand.EXIT
     );
 
     @Getter
