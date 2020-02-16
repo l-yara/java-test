@@ -5,10 +5,14 @@ import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.javamoney.moneta.Money;
+
 import lombok.Value;
 
 @Value
 public class Basket {
+    private static final String DEFAULT_CURRENCY = "GBP";
+    public static final Money ZERO = Money.of(0, DEFAULT_CURRENCY);
 
     private final LocalDate date;
 
@@ -86,4 +90,12 @@ public class Basket {
         return new Basket(getDate(), newContent);
     }
 
+    /**
+     * Convenience method for
+     * @param amount to convert into Money
+     * @return a {@linkplain org.javamoney.moneta.Money} instance
+     */
+    public static Money amount(double amount) {
+        return Money.of(amount, DEFAULT_CURRENCY);
+    }
 }

@@ -14,13 +14,13 @@
     </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.javamoney/moneta -->
+        <!-- https://mvnrepository.com/artifact/org.javamoney.moneta/moneta-core -->
         <dependency>
-            <groupId>org.javamoney</groupId>
-            <artifactId>moneta</artifactId>
+            <groupId>org.javamoney.moneta</groupId>
+            <artifactId>moneta-core</artifactId>
             <version>1.3</version>
-            <type>pom</type>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
