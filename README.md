@@ -1,7 +1,8 @@
 # Building and Execution
 1. Used JDK `Java version: 1.8.0_191, vendor: Oracle Corporation` and Maven 3.6.0. 
 
-Please use usual `mvn clean test` to compile and test, `mvn exec:java` to run.
+   Please use usual `mvn clean test` to compile and test, `mvn exec:java` to run.
+
 2. Each Discount (Promotion) can be applied only once: for example, if basket contains 4 tins of soup, the customer will not get his loaf of bread free. Not a big deal to make multi-discount application anyway.
 
 # Implementation Notes
