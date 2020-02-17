@@ -7,6 +7,7 @@ import static com.industrialLogicTest.domain.Product.MILK;
 import static com.industrialLogicTest.domain.Product.SOUP;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ReplSessionState {
     private final LocalDate today = LocalDate.now();
 
     @Getter
-    private final List<Product> products = Arrays.asList(SOUP, BREAD, MILK, APPLES);
+    private final List<Product> products = new ArrayList<>(Arrays.asList(SOUP, BREAD, MILK, APPLES));
 
     @Getter
     //as set in spec

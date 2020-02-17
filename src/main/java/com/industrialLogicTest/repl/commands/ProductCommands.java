@@ -14,7 +14,7 @@ import com.industrialLogicTest.repl.ReplSessionState;
 public class ProductCommands {
     private static final Splitter ARGUMENT_SPLITTER = Splitter.on(":").trimResults().omitEmptyStrings();
     public static final ReplCommand ADD_PRODUCT = new ReplCommand("product",
-            "add new / modify existing Product. Syntax: <name>:<price>:<unit>. Example: product eggs:2.20:dozen") {
+            "Add new / modify existing Product. Syntax: <name>:<price>:<unit>. Example: product eggs:2.20:dozen") {
         @Override
         public String apply(String arguments, ReplSessionState session) throws ParsingException {
             List<String> strings = ARGUMENT_SPLITTER.splitToList(arguments);
