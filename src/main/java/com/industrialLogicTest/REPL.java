@@ -17,14 +17,7 @@ import com.industrialLogicTest.repl.ReplSessionState;
  * but it is not too stable under Windows. Pity!
  */
 public class REPL {
-
-    private static void disableJdkLoggers() {
-    }
-
     public static void main(String[] args) {
-        //disable JDK loggers
-        Logger.getLogger("").setLevel(Level.OFF);
-
         ReplSessionController controller = new ReplSessionController();
         ReplSessionFormatter formatter  = new ReplSessionFormatter();
 
