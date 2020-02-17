@@ -4,15 +4,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.logging.Logger;
 
 import org.javamoney.moneta.Money;
 
 import com.industrialLogicTest.domain.Basket;
 import com.industrialLogicTest.domain.Promotion;
 
-import lombok.extern.log4j.Log4j2;
-
-@Log4j2
 public class PriceCalculator {
 
     private Collection<Promotion> promotions;
@@ -48,7 +46,7 @@ public class PriceCalculator {
                 Double value = promotion.getDiscountExp().getValue(context, Double.class);
                 return (value == null || value.isNaN()) ? 0.0 : value;
             } catch (Exception ignore) {
-                log.error("Unable to apply '" + promotion.getDiscountExp().getExpressionString() + "' to " + basket);
+                Logger.getLogger(PriceCalculator.class.getName()).severe("Unable to apply '" + promotion.getDiscountExp().getExpressionString() + "' to " + basket);
             }
         }
         return 0.0;
