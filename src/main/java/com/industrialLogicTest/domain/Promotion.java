@@ -33,4 +33,14 @@ public class Promotion {
         this.validTo = validTo;
         this.discountExp = PARSER.parseExpression(discountExp);
     }
+
+    @Override
+    public String toString() {
+        return "Promotion{" +
+                "name='" + name + '\'' +
+                ", valid from " + validFrom +
+                " to " + validTo +
+                ", discountExp='" + discountExp.getExpressionString() +
+                "'}";
+    }
 }

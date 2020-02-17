@@ -27,7 +27,7 @@ public class ReplSessionState {
 
     @Getter
     //as set in spec
-    private final List<Promotion> promotions = Arrays.asList(
+    private final List<Promotion> promotions = new ArrayList<>(Arrays.asList(
             new Promotion("2 tins -> bread 1/2 price", today.minusDays(1), today.plusDays(6),
                     //if you have two or more tins of soup, get 0.5 * price of bread discount
                     "amountOf('soup') >= 2 ? priceFor('bread') * 0.5 : 0"),
@@ -35,7 +35,7 @@ public class ReplSessionState {
             new Promotion("apples 10% off", today.plusDays(3), endOfMonth(today, 1),
                     "totalPriceFor('apples') * 0.1")
 
-    );
+    ));
 
     @Getter
     private Basket basket = new Basket();

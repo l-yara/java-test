@@ -9,7 +9,7 @@ import com.industrialLogicTest.domain.Product;
 import com.industrialLogicTest.repl.ReplSessionState;
 
 /**
- * A set of commands (extensions of {@linkplain com.industrialLogicTest.repl.commands.ReplCommand} working with the {@linkplain com.industrialLogicTest.domain.Basket}: add/remove items, set data etc.
+ * A set of commands (extensions of {@linkplain com.industrialLogicTest.repl.commands.ReplCommand} working with the {@linkplain com.industrialLogicTest.domain.Product}: add/modify items (no "remove" operation as this does not make much sense).
  */
 public class ProductCommands {
     private static final Splitter ARGUMENT_SPLITTER = Splitter.on(":").trimResults().omitEmptyStrings();

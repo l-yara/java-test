@@ -10,6 +10,7 @@ import com.google.common.base.Strings;
 import com.industrialLogicTest.repl.commands.BasketCommands;
 import com.industrialLogicTest.repl.commands.ParsingException;
 import com.industrialLogicTest.repl.commands.ProductCommands;
+import com.industrialLogicTest.repl.commands.PromotionCommands;
 import com.industrialLogicTest.repl.commands.ReplCommand;
 
 import lombok.Getter;
@@ -21,7 +22,8 @@ public class ReplSessionController {
     @Getter
     private final List<ReplCommand> commands = Arrays.asList(
             BasketCommands.CLEAR_BASKET, BasketCommands.ADD_ITEMS, BasketCommands.REMOVE_ITEMS, BasketCommands.NEW_DATE,
-            ReplSessionFormatter.LIST_PRODUCT, ProductCommands.ADD_PRODUCT,
+            ReplSessionFormatter.LIST_PRODUCTS, ProductCommands.ADD_PRODUCT,
+            ReplSessionFormatter.LIST_PROMOTIONS, PromotionCommands.ADD_PROMOTION, PromotionCommands.REMOVE_PROMOTION,
             ReplCommand.EXIT
     );
 

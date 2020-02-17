@@ -101,24 +101,28 @@ public class BasketCommands {
      */
     //visible for testing
     static Map<Product, Integer> extractAmounts(ReplSessionState session, String arguments) throws ParsingException {
-        Map<String, String> parsed = MAP_SPLITTER.split(arguments);
-        //stream-based or lambda-based (via parsed.forEach((productName, amountStr) -> {...}
-        // processing will be a bit bulky, imperative is much cleaner:
-        Map<Product, Integer> ret = new HashMap<>();
-        for (Map.Entry<String, String> src : parsed.entrySet()) {
-            String productName = src.getKey().trim();
-            Product product = session.findProduct(productName);
-            if (product == null) {
-                throw new ParsingException("Unable to find Product by name '" + productName + "' - part of " + arguments);
+        try {
+            Map<String, String> parsed = MAP_SPLITTER.split(arguments);
+            //stream-based or lambda-based (via parsed.forEach((productName, amountStr) -> {...}
+            // processing will be a bit bulky, imperative is much cleaner:
+            Map<Product, Integer> ret = new HashMap<>();
+            for (Map.Entry<String, String> src : parsed.entrySet()) {
+                String productName = src.getKey().trim();
+                Product product = session.findProduct(productName);
+                if (product == null) {
+                    throw new ParsingException("Unable to find Product by name '" + productName + "' - part of " + arguments);
+                }
+                String amountStr = src.getValue().trim();
+                try {
+                    ret.put(product, Integer.parseInt(amountStr));
+                } catch (Exception e) {
+                    throw new ParsingException("Unable to restore integer out of '" + amountStr + "' - part of " + arguments);
+                }
             }
-            String amountStr = src.getValue().trim();
-            try {
-                ret.put(product, Integer.parseInt(amountStr));
-            } catch (Exception e) {
-                throw new ParsingException("Unable to restore integer out of '" + amountStr + "' - part of " + arguments);
-            }
+            return ret;
+        } catch (Exception e) {
+            throw new ParsingException("Problems parsing arguments:" + arguments);
         }
-        return ret;
     }
 
 

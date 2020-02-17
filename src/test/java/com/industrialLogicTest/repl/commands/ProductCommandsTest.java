@@ -27,8 +27,6 @@ public class ProductCommandsTest {
 
     @Mock
     private ReplSessionState session;
-    private ArgumentCaptor<Basket> basketArgumentCaptor;
-
     private List<Product> products;
 
     @Before
@@ -42,8 +40,6 @@ public class ProductCommandsTest {
         when(session.findProduct("apples")).thenReturn(APPLES);
         when(session.findProduct("bread")).thenReturn(BREAD);
         when(session.findProduct("milk")).thenReturn(MILK);
-
-        basketArgumentCaptor = ArgumentCaptor.forClass(Basket.class);
     }
 
     @Test
@@ -51,9 +47,17 @@ public class ProductCommandsTest {
         int sizeBefore = products.size();
         String result = ADD_PRODUCT.apply("eggs: 2.20 : dozen", session);
         assertTrue(result, result.contains("added"));
-        assertTrue(products.size() == sizeBefore + 1);
+        assertEquals(sizeBefore + 1, products.size());
         Product added = products.get(sizeBefore);
         assertEquals(new Product("eggs","dozen", 2.20), added);
+    }
+
+    @Test
+    public void testAddNew_BrokenFormat() throws ParsingException {
+        int sizeBefore = products.size();
+        String result = ADD_PRODUCT.apply("eggs: oops : dozen", session);
+        assertTrue("contains reason: " + result, result.contains("oops"));
+        assertTrue(products.size() == sizeBefore);
     }
 
     @Test

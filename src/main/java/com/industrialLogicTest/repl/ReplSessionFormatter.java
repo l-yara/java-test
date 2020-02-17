@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.google.common.base.Strings;
 import com.industrialLogicTest.domain.Basket;
 import com.industrialLogicTest.domain.Product;
+import com.industrialLogicTest.domain.Promotion;
 import com.industrialLogicTest.repl.commands.ReplCommand;
 
 import lombok.Value;
@@ -48,7 +49,27 @@ public class ReplSessionFormatter {
         return ret.toString();
     }
 
-    public static final ReplCommand LIST_PRODUCT = new ReplCommand("products", "List all products") {
+
+    public static final ReplCommand LIST_PROMOTIONS = new ReplCommand("promotions", "List all promotions") {
+        @Override
+        public String apply(String arguments, ReplSessionState session) {
+            List<Promotion> promotions = session.getPromotions();
+            StringBuilder ret = new StringBuilder("Current promotions: ");
+            if (promotions.isEmpty()) {
+                ret.append("(No Promotions)");
+            } else {
+                for (int i = 0; i < promotions.size(); i++) {
+                    Promotion p = promotions.get(i);
+                    ret.append(LINE_SEPARATOR)
+                            .append(String.format("-- (%d): \"%s\", valid from %s to %s, expression: \"%s\"", i, p.getName(), p.getValidFrom(), p.getValidTo(), p.getDiscountExp().getExpressionString()));
+                }
+            }
+            return ret.append(LINE_SEPARATOR).toString();
+        }
+
+    };
+
+    public static final ReplCommand LIST_PRODUCTS = new ReplCommand("products", "List all products") {
         @Override
         public String apply(String arguments, ReplSessionState session) {
             List<Product> products = session.getProducts();
