@@ -10,9 +10,6 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
 
-import lombok.extern.log4j.Log4j2;
-
-@Log4j2
 public class BasketTest {
 
     @Test
@@ -25,9 +22,5 @@ public class BasketTest {
 
         Basket basket3 = basket2.removeItems(SOUP, 3).removeItems(BREAD, 4);
         assertEquals(ImmutableMap.of(SOUP, 3), basket3.getContent());
-
-        log.error("{}", basket1);
-        log.error("{}", basket2);
-        log.error("{}", basket3);
     }
 }

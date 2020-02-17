@@ -48,5 +48,20 @@ public class ReplSessionFormatter {
         return ret.toString();
     }
 
+    public static final ReplCommand LIST_PRODUCT = new ReplCommand("products", "List all products") {
+        @Override
+        public String apply(String arguments, ReplSessionState session) {
+            List<Product> products = session.getProducts();
+            StringBuilder ret = new StringBuilder("Current products: " + LINE_SEPARATOR);
+            if (products.isEmpty()) {
+                ret.append("(No Products)" + LINE_SEPARATOR);
+            } else {
+                products.forEach((p) -> ret.append(
+                        String.format("-- %s : %.2f/%s", p.getName(), p.getPrice().getNumber().doubleValue(), p.getUnit()))
+                        .append(LINE_SEPARATOR));
+            }
+            return ret.toString();
+        }
+    };
 
 }

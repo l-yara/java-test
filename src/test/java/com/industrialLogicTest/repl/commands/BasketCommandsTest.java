@@ -5,9 +5,10 @@ import static com.industrialLogicTest.domain.Product.BREAD;
 import static com.industrialLogicTest.domain.Product.MILK;
 import static com.industrialLogicTest.domain.Product.SOUP;
 import static com.industrialLogicTest.domain.TestData.TEST_1;
-import static com.industrialLogicTest.domain.TestData.TODAY;
 import static com.industrialLogicTest.repl.commands.ReplCommand.OK;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -23,7 +24,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.industrialLogicTest.domain.Basket;
 import com.industrialLogicTest.domain.Product;
@@ -51,7 +51,7 @@ public class BasketCommandsTest {
     }
 
     @Test
-    public void testClearCommand() {
+    public void testClearCommand() throws ParsingException {
         assertEquals(OK, BasketCommands.CLEAR_BASKET.apply("ignored", session));
         verify(session).updateBasket(basketArgumentCaptor.capture());
 

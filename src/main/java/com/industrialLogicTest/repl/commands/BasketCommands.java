@@ -9,8 +9,10 @@ import com.industrialLogicTest.domain.Basket;
 import com.industrialLogicTest.domain.Product;
 import com.industrialLogicTest.repl.ReplSessionState;
 
+/**
+ * A set of commands (extensions of {@linkplain ReplCommand} working with the {@linkplain Basket}: add/remove items, set data etc.
+ */
 public class BasketCommands {
-    private static final Splitter ARGUMENT_SPLITTER = Splitter.on(',').trimResults().omitEmptyStrings();
     private static final Splitter.MapSplitter MAP_SPLITTER = Splitter.on(',').trimResults().omitEmptyStrings().withKeyValueSeparator(":");
 
     public static final ReplCommand CLEAR_BASKET = new ReplCommand("clear", "Reset basket to (today, no items) state") {

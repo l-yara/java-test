@@ -7,13 +7,11 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import lombok.Value;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * A single promotion, like "Buy 2 tins of soup and get a loaf of bread half price"
  */
 @Value
-@Log4j2
 public class Promotion {
     public static final ExpressionParser PARSER = new SpelExpressionParser();
 

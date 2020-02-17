@@ -10,9 +10,6 @@ import org.junit.Test;
 
 import com.industrialLogicTest.domain.Basket;
 
-import lombok.extern.log4j.Log4j2;
-
-@Log4j2
 public class PricingContextTest {
     public static final double TOLERANCE = 0.00000001;
     public static final Basket BASKET_1 = new Basket(TODAY).addItems(SOUP, 5);
@@ -45,7 +42,6 @@ public class PricingContextTest {
     @Test
     public void testBasket_2() {
         PricingContext ctx = new PricingContext(BASKET_2);
-        log.error("{}", ctx);
         assertEquals(6, ctx.amountOf("SOUP"));
         assertDouble(0.65, ctx.priceFor("sOUp"));
         assertDouble(3.9, ctx.totalPriceFor("souP"));
